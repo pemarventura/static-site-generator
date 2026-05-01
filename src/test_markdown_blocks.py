@@ -3,6 +3,7 @@ from markdown_blocks import (
     markdown_to_html_node,
     markdown_to_blocks,
     block_to_block_type,
+    extract_title,
     BlockType,
 )
 
@@ -64,6 +65,14 @@ This is the same paragraph on a new line
         self.assertEqual(block_to_block_type(block), BlockType.OLIST)
         block = "paragraph"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+    
+    def test_extract_title_no_h1_header(self):
+        md = "##"
+
+        with self.assertRaises(Exception) as context:
+            extract_title(md)
+        self.assertEqual(str(context.exception), "No header h1 in markdown")
 
     def test_paragraph(self):
         md = """

@@ -24,10 +24,8 @@ def markdown_to_blocks(markdown):
         filtered_blocks.append(block)
     return filtered_blocks
 
-
 def block_to_block_type(block):
     lines = block.split("\n")
-
     if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
         return BlockType.HEADING
     if len(lines) > 1 and lines[0].startswith("```") and lines[-1].startswith("```"):
@@ -51,6 +49,17 @@ def block_to_block_type(block):
         return BlockType.OLIST
     return BlockType.PARAGRAPH
 
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+
+    for block in blocks:
+        if block_to_block_type(block) == BlockType.HEADING:
+            html_heading = heading_to_html_node(block)
+            if html_heading.tag == "h1":
+                return html_heading.children[0].value
+    raise Exception("No header h1 in markdown")
+        
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
@@ -149,3 +158,4 @@ def quote_to_html_node(block):
     content = " ".join(new_lines)
     children = text_to_children(content)
     return ParentNode("blockquote", children)
+
