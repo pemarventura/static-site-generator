@@ -24,6 +24,7 @@ def main():
     print("Copying static files to public directory...")
     copy_files_recursive(dir_path_static, dir_path_public)
 
+    open(os.path.join(dir_path_public, ".nojekyll"), "w").close()
 
     generate_pages_recursive(dir_path_content, "./template.html", dir_path_public, basepath)
 
